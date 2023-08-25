@@ -20,19 +20,17 @@ document.addEventListener("DOMContentLoaded", function () {
     revealButton.addEventListener("click", reveal);
 });
 
-
+// was wenn 17 17??
 function stay() {
     while (IntvalueC < 17) {
-        if (IntvalueC < 17) {
-            placeCardInSlot("C");
-        }
-        const cardBorderCom = document.getElementById("card-borderCom");
-        if (cardBorderCom) { removeChildNodes(cardBorderCom); }
-        reloadComCards();
+        placeCardInSlot("C");
     }
-    if(IntvalueP > IntvalueC && IntvalueC <= 21){
+    const cardBorderCom = document.getElementById("card-borderCom");
+    if (cardBorderCom) { removeChildNodes(cardBorderCom); }
+    reloadComCards();
+    if (IntvalueP > IntvalueC || IntvalueC > 21 || IntvalueP <= 21) {
         console.log("PLAYER WINS");
-    }else{
+    } else {
         console.log("COM WINS");
     }
 }

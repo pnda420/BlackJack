@@ -1,66 +1,69 @@
 import { deck } from './cards.js';
-const card1 = document.getElementById('card1');
-const card2 = document.getElementById('card2');
 
-let slotOneHasCard = false;
-let slotTwoHasCard = false;
+const pCard1 = document.getElementById('pCard1');
+const pCard2 = document.getElementById('pCard2');
+const cCard1 = document.getElementById('cCard1');
+const cCard2 = document.getElementById('cCard2');
+const valueP = document.getElementById('valueP');
+const valueC = document.getElementById('valueC');
+let IntvalueP = 0;
+let IntvalueC = 0;
 
+
+
+// Warte, bis das DOM geladen ist
 document.addEventListener("DOMContentLoaded", function () {
-    var meinButton = document.getElementById("meinButton");
-    meinButton.addEventListener("click", function () {
-        changeCard();
-    });
+    const startButton = document.getElementById("start");
+    startButton.addEventListener("click", getCards);
+    const reset = document.getElementById("reset");
+    reset.addEventListener("click", resetSlots);
+
 });
 
-function changeCard() {
-    console.log(slotOneHasCard);
-        console.log(slotTwoHasCard);
-   
-        if(slotOneHasCard && slotTwoHasCard){
-            card1.src = "";
-            card2.src = "";
-            slotOneHasCard = false;
-            slotTwoHasCard = false;
-        }else  if(slotOneHasCard == true && slotTwoHasCard == false){
-            const card = getRandomAliveCard();
-            if (card) { card2.src = card.src }
-            slotTwoHasCard = true;
-        }else if(slotOneHasCard == false){
-            const card = getRandomAliveCard();
-            if (card) { card1.src = card.src }
-            slotOneHasCard = true;
-        }
-    
-     
+function getCards() {
 
-   
+    placeCardInSlot(pCard1, "P");
+    placeCardInSlot(pCard2, "P");
 
-    
-
-
+    placeCardInSlot(cCard1, "C");
+    placeCardInSlot(cCard2, "C");
 
     const aliveCardsCount = deck.filter(card => !card.dead).length;
     console.log(`Anzahl der lebenden Karten: ${aliveCardsCount}`);
+}
 
+function resetSlots() {
+    pCard1.src = "/pictures/Empty.png";
+    pCard2.src = "/pictures/Empty.png";
+    cCard1.src = "/pictures/Empty.png";
+    cCard2.src = "/pictures/Empty.png";
+    IntvalueC = 0;
+    IntvalueP = 0;
+    valueP.textContent = `Value: 0`;
+    valueC.textContent = `Value: 0`;
+}
+
+function placeCardInSlot(slot, mode) {
+    const card = getRandomAliveCard();
+    if (card) {
+        if (mode == "P") {
+            IntvalueP += card.value;
+            valueP.textContent = `Value: ${IntvalueP}`;
+        }
+        if (mode == "C") {
+            IntvalueC += card.value;
+            valueC.textContent = `Value: ${IntvalueC}`;
+        }
+        slot.src = card.src;
+        card.dead = true;
+    }
 }
 
 function getRandomAliveCard() {
-    let randomIndex;
-    let selectedCard;
-
-    if (deck.filter(card => !card.dead).length > 0) {
-        do {
-            randomIndex = Math.floor(Math.random() * deck.length);
-            selectedCard = deck[randomIndex];
-        } while (selectedCard.dead);
-        selectedCard.dead = true;
-        return selectedCard;
-    } else {
-        return undefined
+    const aliveCards = deck.filter(card => !card.dead);
+    if (aliveCards.length > 0) {
+        const randomIndex = Math.floor(Math.random() * aliveCards.length);
+        return aliveCards[randomIndex];
     }
-
-
-
+    return undefined;
 }
-
-

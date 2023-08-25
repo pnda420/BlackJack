@@ -2,14 +2,24 @@
     background-color: black;
     width: 200px;
     height: 300px;
-    
 }
-/* CSS-Regeln für den Pokertisch */
+
+.value {
+    position: relative;
+    left: 250px;
+    bottom: 170px;
+    color: white;
+    font-size: 30px;
+    font-family: 'Cardo', serif;
+}
+
+
+
 .table {
-    width: 800px; /* Breite des Pokertisches */
-    height: 400px; /* Höhe des Pokertisches */
+    width: 1; /* Breite des Pokertisches */
+    height: 800px; /* Höhe des Pokertisches */
     background-color: #007700; /* Grüne Tischfarbe */
-    margin: 0 auto;
+
     position: relative;
     border: 10px solid #000; /* Schwarzer Rand */
     border-radius: 20px; /* Runde Ecken */
@@ -17,14 +27,10 @@
 
 /* CSS-Regeln für die Kartenablage */
 .card-holder {
-    width: 100%;
-    height: 100%;
-    position: absolute;
     top: 0;
     left: 0;
     display: flex;
     justify-content: center;
-    align-items: center;
 }
 
 /* CSS für den weißen Rahmen, wenn keine Karte vorhanden ist */

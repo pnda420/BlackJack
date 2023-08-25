@@ -10,40 +10,30 @@
 
 <body>
     <div class="table">
-       
 
-
-        <div class="card-holder">
-            <div class="card-border">
-                <img id="cCard1" class="card" src="/pictures/Empty.png" alt="no Card">
-            </div>
-            <div class="card-border">
-                <img id="cCard2" class="card" src="/pictures/Empty.png" alt="no Card">
-                <div id="valueC" class="value">
-                    Value: 0
-                </div>
-            </div>
-            
-
+        <div class="card-holder" id="card-borderCom">
+            <!-- cards go here -->
         </div>
 
-        <div class="card-holder">
-            <div class="card-border">
-                <img id="pCard1" class="card" src="/pictures/Empty.png" alt="no Card">
-            </div>
-            <div class="card-border">
-                <img id="pCard2" class="card" src="/pictures/Empty.png" alt="no Card">
-                <div id="valueP" class="value">
-                    Value: 0
-                </div>
-            </div>
+        <div class="card-holder" id="card-borderPlayer" style="margin-top: 100px;">
+               <!-- cards go here -->
         </div>
 
-
-   
+        <div class="buttonArea">
+            <button id="start" class="button">Start</button>
+            <button id="take" class="button" style="margin-left: 100px;">Take Card</button>
+            <button id="stay" class="button">Stay</button>
+            <button id="reset" class="button" style="margin-left: 100px;">Reset</button>
+            <div id="valueP" class="value" style="margin-left: 20px;">
+                ValueP: 0
+            </div>
+            <div id="valueC" class="value" style="margin-left: 20px;">
+                ValueC: 0
+            </div>
+        </div>
     </div>
-    <button id="start">shuffle</button>
-    <button id="reset">reset</button>
+
+    
 
     <script type="module" src="script.js"></script>
 </body>

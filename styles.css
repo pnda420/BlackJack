@@ -5,61 +5,57 @@
 }
 
 .value {
-    position: relative;
-    left: 250px;
-    bottom: 170px;
     color: white;
     font-size: 30px;
     font-family: 'Cardo', serif;
 }
 
-
-
-.table {
-    width: 1; /* Breite des Pokertisches */
-    height: 800px; /* Höhe des Pokertisches */
-    background-color: #007700; /* Grüne Tischfarbe */
-
+.buttonArea {
     position: relative;
-    border: 10px solid #000; /* Schwarzer Rand */
-    border-radius: 20px; /* Runde Ecken */
+    display: flex;
+    justify-content: center;
 }
 
-/* CSS-Regeln für die Kartenablage */
+.button {
+    padding: 12px 24px;
+    font-size: 20px;
+    background-color: #4CAF50; 
+    color: white;
+    border: 2px solid #4CAF50; 
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 5px;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+button:hover {
+    background-color: #45a049; 
+    border-color: #45a049;
+}
+
+.table {
+    width: 1; 
+    height: 900px; 
+    background-color: #007700; 
+    position: relative;
+    border: 10px solid #000; 
+    border-radius: 20px; 
+}
+
 .card-holder {
     top: 0;
     left: 0;
     display: flex;
     justify-content: center;
+    margin: 20px;
 }
 
-/* CSS für den weißen Rahmen, wenn keine Karte vorhanden ist */
 .card-border {
-    border: 5px solid #fff; /* Weißer Rahmen */
-    border-radius: 15px; /* Runde Ecken für den Rahmen */
-    padding: 5px; /* Abstand zwischen dem Rahmen und dem Bild */
+    border: 5px solid #fff; 
+    border-radius: 15px;
+    padding: 5px; 
     width: 200px;
     height: 300px;
     margin: 5px;
 }
 
-
-
-
-
-
-
-
-button {
-    padding: 10px 20px;
-    font-size: 18px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-/* Stile für den Button, wenn die Maus darüber schwebt */
-button:hover {
-    background-color: #0056b3;
-}

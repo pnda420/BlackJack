@@ -11,10 +11,14 @@
 }
 
 .buttonArea {
-    position: relative;
-    display: flex;
-    justify-content: center;
+    position: absolute;
+    bottom: 0;
+    left: 50%; /* Setzt den linken Rand auf die horizontale Mitte */
+    transform: translateX(-50%); 
+    width: 1000px;
 }
+
+
 
 .button {
     padding: 12px 24px;

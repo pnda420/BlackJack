@@ -1,9 +1,5 @@
 import { deck } from './cards.js';
 
-const pCard1 = document.getElementById('pCard1');
-const pCard2 = document.getElementById('pCard2');
-const cCard1 = document.getElementById('cCard1');
-const cCard2 = document.getElementById('cCard2');
 const valueP = document.getElementById('valueP');
 const valueC = document.getElementById('valueC');
 let IntvalueP = 0;
@@ -18,10 +14,28 @@ document.addEventListener("DOMContentLoaded", function () {
     takeButton.addEventListener("click", getCard);
     const resetButton = document.getElementById("reset");
     resetButton.addEventListener("click", resetSlots);
+    const stayButton = document.getElementById("stay");
+    stayButton.addEventListener("click", stay);
+    const revealButton = document.getElementById("reveal");
+    revealButton.addEventListener("click", reveal);
 });
 
 
-
+function stay() {
+    while (IntvalueC < 17) {
+        if (IntvalueC < 17) {
+            placeCardInSlot("C");
+        }
+        const cardBorderCom = document.getElementById("card-borderCom");
+        if (cardBorderCom) { removeChildNodes(cardBorderCom); }
+        reloadComCards();
+    }
+    if(IntvalueP > IntvalueC && IntvalueC <= 21){
+        console.log("PLAYER WINS");
+    }else{
+        console.log("COM WINS");
+    }
+}
 
 
 
@@ -29,7 +43,7 @@ function startGame() {
     placeCardInSlot("P");
     placeCardInSlot("P");
     placeCardInSlot("C");
-    placeCardInSlot("C");
+    placeCardInSlot("C", "startCards");
 }
 
 function getCard() {
@@ -63,7 +77,7 @@ function removeChildNodes(parentNode) {
 }
 
 
-function placeCardInSlot(mode) {
+function placeCardInSlot(mode, action) {
     const card = getRandomAliveCard();
     if (card) {
         if (mode == "P") {
@@ -93,13 +107,34 @@ function placeCardInSlot(mode) {
             cardBorderC.classList.add("card-border");
             const cardImageC = document.createElement("img");
             cardImageC.classList.add("card");
-            cardImageC.src = comCards[comCards.length - 1].src;
+            if (comCards[1] == card && action == "startCards") {
+                cardImageC.src = '/pictures/card_back.png';
+            }
+            else {
+                cardImageC.src = comCards[comCards.length - 1].src;
+            }
             cardImageC.alt = "Added Card";
             cardBorderC.appendChild(cardImageC);
             cardborderCom.appendChild(cardBorderC);
 
         }
     }
+}
+
+function reloadComCards() {
+    const cardborderCom = document.getElementById("card-borderCom");
+
+    for (const card of comCards) {
+        const cardBorderC = document.createElement("div");
+        cardBorderC.classList.add("card-border");
+        const cardImageC = document.createElement("img");
+        cardImageC.classList.add("card");
+        cardImageC.src = card.src;
+        cardImageC.alt = "Added Card";
+        cardBorderC.appendChild(cardImageC);
+        cardborderCom.appendChild(cardBorderC);
+    }
+
 }
 
 function getRandomAliveCard() {

@@ -7,45 +7,125 @@ let IntvalueC = 0;
 let playerCards = []
 let comCards = []
 
+let playerWins = false;
+
+const clickSound = document.getElementById("clickSound");
+const foldSound = document.getElementById("foldSound");
+const winSound = document.getElementById("winSound");
+const loseSound = document.getElementById("loseSound"); 
+const volumeSlider = document.getElementById("volumeSlider");
+
 document.addEventListener("DOMContentLoaded", function () {
     const startButton = document.getElementById("start");
-    startButton.addEventListener("click", startGame);
+    startButton.addEventListener("click", function () {
+        clickSound.volume = volumeSlider.value;
+        clickSound.play();
+        startGame();
+    });
+
     const takeButton = document.getElementById("take");
-    takeButton.addEventListener("click", getCard);
+    takeButton.addEventListener("click", function () {
+        clickSound.volume = volumeSlider.value;
+        foldSound.play();
+        getCard();
+    });
+
     const resetButton = document.getElementById("reset");
-    resetButton.addEventListener("click", resetSlots);
+    resetButton.addEventListener("click", function () {
+        clickSound.volume = volumeSlider.value;
+        clickSound.play();
+        resetSlots();
+    });
+
     const stayButton = document.getElementById("stay");
-    stayButton.addEventListener("click", stay);
-    const revealButton = document.getElementById("reveal");
-    revealButton.addEventListener("click", reveal);
+    stayButton.addEventListener("click", function () {
+        clickSound.volume = volumeSlider.value;
+        foldSound.play();
+        stay();
+    });
 });
 
-// was wenn 17 17??
-function stay() {
-    while (IntvalueC < 17) {
-        placeCardInSlot("C");
-    }
+async function stay() {
+    
     const cardBorderCom = document.getElementById("card-borderCom");
     if (cardBorderCom) { removeChildNodes(cardBorderCom); }
     reloadComCards();
-    if (IntvalueP > IntvalueC || IntvalueC > 21 || IntvalueP <= 21) {
-        console.log("PLAYER WINS");
+    valueC.textContent = `${IntvalueC}`;
+    if (IntvalueC == 21) {
+        const cardBorderCom = document.getElementById("card-borderCom");
+        if (cardBorderCom) { removeChildNodes(cardBorderCom); }
+        reloadComCards();
+        valueC.textContent = `${IntvalueC}`;
     } else {
-        console.log("COM WINS");
+        while (IntvalueC < 17) {
+            valueC.textContent = `${IntvalueC}`;
+            let delayres = await delay(600);
+            foldSound.play();
+            placeCardInSlot("C");
+            const cardBorderCom = document.getElementById("card-borderCom");
+            if (cardBorderCom) { removeChildNodes(cardBorderCom); }
+            reloadComCards();
+            valueC.textContent = `${IntvalueC}`;
+        }
+    }
+    
+    if (IntvalueP == 21 && IntvalueC == 21) {
+        playerWins = false;
+        winCheck();
+    } else if (IntvalueC >= 17 && IntvalueC <= 21) {
+        if (IntvalueP > IntvalueC || IntvalueC > 21) {
+            playerWins = true;
+            winCheck();
+        } else {
+            playerWins = false;
+            winCheck();
+        }
+    } else {
+        if (IntvalueP > IntvalueC || IntvalueC > 21) {
+            playerWins = true;
+            winCheck();
+        } else {
+            playerWins = false;
+            winCheck();
+        }
     }
 }
 
+const delay = (delayInms) => {
+    return new Promise(resolve => setTimeout(resolve, delayInms));
+}
 
+function winCheck() {
+    if (playerWins) {
+        winSound.play();
+    } else {
+        loseSound.play();
+    }
+}
 
 function startGame() {
+    resetSlots();
     placeCardInSlot("P");
     placeCardInSlot("P");
     placeCardInSlot("C");
     placeCardInSlot("C", "startCards");
+
+    if (IntvalueC === 21) {
+        const cardBorderCom = document.getElementById("card-borderCom");
+        if (cardBorderCom) { removeChildNodes(cardBorderCom); }
+        reloadComCards();
+        playerWins = false;
+        winCheck();
+    }
 }
 
 function getCard() {
     placeCardInSlot("P");
+
+    if (IntvalueP > 21) {
+        playerWins = false;
+        winCheck();
+    }
 }
 
 function resetSlots() {
@@ -54,7 +134,6 @@ function resetSlots() {
     playerCards = [];
     comCards = [];
 
-    //Remove Cards from DOM
     const cardBorderPlayer = document.getElementById("card-borderPlayer");
     const cardBorderCom = document.getElementById("card-borderCom");
     if (cardBorderPlayer) { removeChildNodes(cardBorderPlayer); }
@@ -64,8 +143,8 @@ function resetSlots() {
         card.dead = false;
     }
 
-    valueP.textContent = `Value: 0`;
-    valueC.textContent = `Value: 0`;
+    valueP.textContent = ``;
+    valueC.textContent = ``;
 }
 
 function removeChildNodes(parentNode) {
@@ -74,15 +153,20 @@ function removeChildNodes(parentNode) {
     }
 }
 
-
 function placeCardInSlot(mode, action) {
     const card = getRandomAliveCard();
     if (card) {
         if (mode == "P") {
             playerCards.push(card);
             card.dead = true;
-            IntvalueP += card.value;
-            valueP.textContent = `Value: ${IntvalueP}`;
+
+            if (card.value === 11 && IntvalueP + 11 > 21) {
+                IntvalueP += 1;
+            } else {
+                IntvalueP += card.value;
+            }
+
+            valueP.textContent = `${IntvalueP}`;
 
             const cardborderPlayer = document.getElementById("card-borderPlayer");
             const cardBorderP = document.createElement("div");
@@ -97,8 +181,12 @@ function placeCardInSlot(mode, action) {
         if (mode == "C") {
             comCards.push(card);
             card.dead = true;
-            IntvalueC += card.value;
-            valueC.textContent = `Value: ${IntvalueC}`;
+
+            if (card.value === 11 && IntvalueC + 11 > 21) {
+                IntvalueC += 1;
+            } else {
+                IntvalueC += card.value;
+            }
 
             const cardborderCom = document.getElementById("card-borderCom");
             const cardBorderC = document.createElement("div");
@@ -114,7 +202,6 @@ function placeCardInSlot(mode, action) {
             cardImageC.alt = "Added Card";
             cardBorderC.appendChild(cardImageC);
             cardborderCom.appendChild(cardBorderC);
-
         }
     }
 }
@@ -132,7 +219,6 @@ function reloadComCards() {
         cardBorderC.appendChild(cardImageC);
         cardborderCom.appendChild(cardBorderC);
     }
-
 }
 
 function getRandomAliveCard() {

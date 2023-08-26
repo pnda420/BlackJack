@@ -2,51 +2,76 @@ import { deck } from './cards.js';
 
 const valueP = document.getElementById('valueP');
 const valueC = document.getElementById('valueC');
+const totalMoney = document.getElementById('totalMoney');
+const betMoney = document.getElementById('bet');
 let IntvalueP = 0;
 let IntvalueC = 0;
 let playerCards = []
 let comCards = []
-
+let InttotalMoney = 1000;
+let IntBetMoney = 100;
 let playerWins = false;
+let canPlay = false;
 
 const clickSound = document.getElementById("clickSound");
 const foldSound = document.getElementById("foldSound");
 const winSound = document.getElementById("winSound");
-const loseSound = document.getElementById("loseSound"); 
+const loseSound = document.getElementById("loseSound");
 const volumeSlider = document.getElementById("volumeSlider");
 
 document.addEventListener("DOMContentLoaded", function () {
-    const startButton = document.getElementById("start");
+    const startButton = document.getElementById("bet");
     startButton.addEventListener("click", function () {
-        clickSound.volume = volumeSlider.value;
-        clickSound.play();
-        startGame();
+        if (canPlay == false) {
+            clickSound.volume = volumeSlider.value;
+            clickSound.play();
+
+            if (InttotalMoney >= IntBetMoney) {
+                InttotalMoney-=IntBetMoney;
+                totalMoney.textContent = `${InttotalMoney}`;
+                startGame();
+                canPlay = true;
+            } else {
+                console.log("out of money!");
+                canPlay = false;
+            }
+        }
     });
 
     const takeButton = document.getElementById("take");
     takeButton.addEventListener("click", function () {
-        clickSound.volume = volumeSlider.value;
-        foldSound.play();
-        getCard();
-    });
-
-    const resetButton = document.getElementById("reset");
-    resetButton.addEventListener("click", function () {
-        clickSound.volume = volumeSlider.value;
-        clickSound.play();
-        resetSlots();
+        if (canPlay) {
+            foldSound.volume = volumeSlider.value;
+            foldSound.play();
+            getCard();
+        }
     });
 
     const stayButton = document.getElementById("stay");
     stayButton.addEventListener("click", function () {
+        if (canPlay) {
+            foldSound.volume = volumeSlider.value;
+            foldSound.play();
+            stay();
+        }
+    });
+    const decreaseMoney = document.getElementById("decreaseMoney");
+    decreaseMoney.addEventListener("click", function () {
         clickSound.volume = volumeSlider.value;
-        foldSound.play();
-        stay();
+        clickSound.play();
+        IntBetMoney -= 10;
+        betMoney.textContent = `Bet ${IntBetMoney}€`;
+    });
+    const addMoney = document.getElementById("addMoney");
+    addMoney.addEventListener("click", function () {
+        clickSound.volume = volumeSlider.value;
+        clickSound.play();
+        IntBetMoney += 10;
+        betMoney.textContent = `Bet ${IntBetMoney}€`;
     });
 });
 
 async function stay() {
-    
     const cardBorderCom = document.getElementById("card-borderCom");
     if (cardBorderCom) { removeChildNodes(cardBorderCom); }
     reloadComCards();
@@ -68,7 +93,7 @@ async function stay() {
             valueC.textContent = `${IntvalueC}`;
         }
     }
-    
+
     if (IntvalueP == 21 && IntvalueC == 21) {
         playerWins = false;
         winCheck();
@@ -96,8 +121,11 @@ const delay = (delayInms) => {
 }
 
 function winCheck() {
+    canPlay = false;
     if (playerWins) {
         winSound.play();
+        InttotalMoney += IntBetMoney*2
+        totalMoney.textContent = `${InttotalMoney}`;
     } else {
         loseSound.play();
     }

@@ -14,19 +14,10 @@
     transform: translateX(-50%);
 }
 
-
-.buttonArea {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%); 
-}
-
-
 .button {
     padding: 12px 24px;
     font-size: 20px;
-    background-color: #4CAF50; 
+    background-color: #4CAF50;
     color: white;
     border: none;
     border-radius: 8px;
@@ -34,6 +25,56 @@
     margin: 5px;
     position: relative;
     overflow: hidden;
+    display: inline-block; 
+    text-align: center; 
+}
+
+.buttonArea {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.topBarLeft {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.topBarRight {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+.money {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 16px;
+    font-size: 24px;
+    background-color: #ffcc29;
+    color: #333;
+    border-radius: 8px;
+}
+.money::before {
+    content: ""; /* Leeres Inhaltsattribut für das Pseudoelement */
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-image: url('/pictures/money.png'); /* Pfad zum Geld-Logo */
+    background-size: cover; /* Größenanpassung des Logos */
+    margin-right: 8px; /* Abstand zwischen Logo und Betrag */
 }
 
 .button:hover {
@@ -70,13 +111,22 @@
 }
 
 
+body {
+    margin: 0; /* Kein Außenabstand */
+    padding: 0; /* Kein Innenabstand */
+    background-color: #007700; /* Hintergrundfarbe des Body */
+    overflow: hidden; /* Verhindert das Anzeigen von Scrollleisten */
+}
+
 .table {
-    width: 1; 
-    height: 900px; 
-    background-color: #007700; 
-    position: relative;
-    border: 10px solid #000; 
-    border-radius: 20px; 
+    width: 100vw;
+    height: 100vh;
+    background-color: transparent; /* Transparenter Hintergrund */
+    position: absolute;
+    border: none;
+    border-radius: 0;
+    margin: 0;
+    padding: 0;
 }
 
 .card-holder {
@@ -96,3 +146,37 @@
     margin: 5px;
 }
 
+/* Stil für den Range-Slider */
+input[type="range"] {
+    margin-left: 20px;
+    -webkit-appearance: none; /* Entferne native Styling */
+    appearance: none;
+    width: 100%; /* Volle Breite des Containers */
+    height: 8px; /* Höhe des Sliders */
+    background-color: #ccc; /* Hintergrundfarbe */
+    border-radius: 4px; /* Abgerundete Ecken */
+    outline: none; /* Entferne den blauen Fokus-Rahmen */
+    opacity: 0.7; /* Transparenz, wenn nicht aktiv */
+    transition: opacity 0.2s ease;
+}
+
+/* Stil für den Slider-Griff (Daumen) */
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Entferne native Styling */
+    appearance: none;
+    width: 16px; /* Breite des Griffs */
+    height: 16px; /* Höhe des Griffs */
+    background-color: #4CAF50; /* Farbe des Griffs */
+    border: none;
+    border-radius: 50%; /* Runder Griff */
+    cursor: pointer;
+}
+
+/* Anpassungen, wenn der Slider aktiv ist */
+input[type="range"]:hover {
+    opacity: 1; /* Zeige den Slider vollständig */
+}
+
+input[type="range"]:active {
+    opacity: 1; /* Zeige den Slider vollständig */
+}

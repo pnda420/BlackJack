@@ -10,21 +10,29 @@ let playerCards = []
 let comCards = []
 let InttotalMoney = 1000;
 let IntBetMoney = 100;
-let playerWins = false;
 let canPlay = false;
+let playerHasBJ = false;
+
+const GameOutcome = {
+    PLAYER_WIN: "player_win",
+    DEALER_WIN: "dealer_win",
+    DRAW: "draw"
+};
+
 
 const clickSound = document.getElementById("clickSound");
 const foldSound = document.getElementById("foldSound");
 const winSound = document.getElementById("winSound");
 const loseSound = document.getElementById("loseSound");
+const coinSound = document.getElementById("coinSound")
 const volumeSlider = document.getElementById("volumeSlider");
 
 document.addEventListener("DOMContentLoaded", function () {
     const startButton = document.getElementById("bet");
     startButton.addEventListener("click", function () {
         if (canPlay == false) {
-            clickSound.volume = volumeSlider.value;
-            clickSound.play();
+            coinSound.volume = volumeSlider.value;
+            coinSound.play();
 
             if (InttotalMoney >= IntBetMoney) {
                 InttotalMoney-=IntBetMoney;
@@ -73,10 +81,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 async function stay() {
     const cardBorderCom = document.getElementById("card-borderCom");
+
     if (cardBorderCom) { removeChildNodes(cardBorderCom); }
+
     reloadComCards();
     valueC.textContent = `${IntvalueC}`;
-    if (IntvalueC == 21) {
+
+    if (IntvalueC === 21) {
         const cardBorderCom = document.getElementById("card-borderCom");
         if (cardBorderCom) { removeChildNodes(cardBorderCom); }
         reloadComCards();
@@ -94,42 +105,66 @@ async function stay() {
         }
     }
 
-    if (IntvalueP == 21 && IntvalueC == 21) {
-        playerWins = false;
-        winCheck();
+    let outcome = null;
+
+    if (IntvalueP === 21 && IntvalueC === 21) {
+        outcome = GameOutcome.DEALER_WIN;
+    } else if (IntvalueP === IntvalueC) {
+        outcome = GameOutcome.DRAW;
     } else if (IntvalueC >= 17 && IntvalueC <= 21) {
         if (IntvalueP > IntvalueC || IntvalueC > 21) {
-            playerWins = true;
-            winCheck();
+            outcome = GameOutcome.PLAYER_WIN;
         } else {
-            playerWins = false;
-            winCheck();
+            outcome = GameOutcome.DEALER_WIN;
         }
     } else {
         if (IntvalueP > IntvalueC || IntvalueC > 21) {
-            playerWins = true;
-            winCheck();
+            outcome = GameOutcome.PLAYER_WIN;
         } else {
-            playerWins = false;
-            winCheck();
+            outcome = GameOutcome.DEALER_WIN;
         }
     }
+
+    winCheck(outcome);
 }
+
+
 
 const delay = (delayInms) => {
     return new Promise(resolve => setTimeout(resolve, delayInms));
 }
 
-function winCheck() {
+function winCheck(outcome) {
     canPlay = false;
-    if (playerWins) {
-        winSound.play();
-        InttotalMoney += IntBetMoney*2
-        totalMoney.textContent = `${InttotalMoney}`;
-    } else {
-        loseSound.play();
+
+    switch (outcome) {
+        case GameOutcome.DRAW:
+            InttotalMoney += IntBetMoney;
+            totalMoney.textContent = `${InttotalMoney}`;
+            coinSound.volume = volumeSlider.value;
+            coinSound.play();
+            console.log("DRAW");
+            break;
+        case GameOutcome.PLAYER_WIN:
+            winSound.volume = volumeSlider.value;
+            winSound.play();
+            if(playerHasBJ){
+                InttotalMoney += IntBetMoney * 2.5;
+            }else{
+                InttotalMoney += IntBetMoney * 2;
+            }
+            
+            totalMoney.textContent = `${InttotalMoney}`;
+            console.log("WIN");
+            break;
+        case GameOutcome.DEALER_WIN:
+            loseSound.volume = volumeSlider.value;
+            loseSound.play();
+            console.log("LOOSE");
+            break;
     }
 }
+
 
 function startGame() {
     resetSlots();
@@ -138,29 +173,40 @@ function startGame() {
     placeCardInSlot("C");
     placeCardInSlot("C", "startCards");
 
-    if (IntvalueC === 21) {
+    if (IntvalueC == 21) {
         const cardBorderCom = document.getElementById("card-borderCom");
         if (cardBorderCom) { removeChildNodes(cardBorderCom); }
         reloadComCards();
-        playerWins = false;
-        winCheck();
+        
+        let outcome = GameOutcome.DEALER_WIN;
+        
+        winCheck(outcome);
+    }
+    if(IntvalueP == 21){
+        valueP.textContent = "BlackJack!";
+        playerHasBJ = true;
+        console.log("PlayerHasBJ");
     }
 }
+
 
 function getCard() {
     placeCardInSlot("P");
 
     if (IntvalueP > 21) {
-        playerWins = false;
-        winCheck();
+        let outcome = GameOutcome.DEALER_WIN;
+        
+        winCheck(outcome);
     }
 }
+
 
 function resetSlots() {
     IntvalueC = 0;
     IntvalueP = 0;
     playerCards = [];
     comCards = [];
+    playerHasBJ = false;
 
     const cardBorderPlayer = document.getElementById("card-borderPlayer");
     const cardBorderCom = document.getElementById("card-borderCom");

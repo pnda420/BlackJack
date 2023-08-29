@@ -10,30 +10,28 @@
 </head>
 
 <body>
-    <div class="win-banner" id="winBanner">
-        <p>You Win!</p>
-    </div>
+
 
     <div class="table">
         <div class="topBarLeft">
-            <span class="money" id="totalMoney">1000</span>
-            <input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="0.3">
-        </div>
-  
-        <div class="topBarRight">
+            <span class="money" id="totalMoney" style="margin-right: 20px;">1000</span>
             <button id="decreaseMoney" class="button">-</button>
-            <button id="bet" class="button" style="background-color: #ffcc29; color: black;">Bet 100€</button>
+            <span class="money" id="bet">100</span>
             <button id="addMoney" class="button">+</button>
         </div>
 
-        <div>
-        <div id="valueC" class="value" style="top: 40px;">
+        <div class="topBarRight">
+            <input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="0.3">
         </div>
 
-        <div class="card-holder" id="card-borderCom" style="margin-top: 100px;">
-            <!-- cards go here -->
+        <div>
+            <div id="valueC" class="value" style="top: 40px;">
+            </div>
+
+            <div class="card-holder" id="card-borderCom" style="margin-top: 100px;">
+                <!-- cards go here -->
+            </div>
         </div>
-    </div>
 
 
         <div class="card-holder" id="card-borderPlayer">
@@ -41,6 +39,7 @@
         </div>
 
         <div class="buttonArea">
+            <button id="betButton" class="button" style="background-color: #ffcc29; color: black;">Start</button>
             <button id="take" class="button">Take Card</button>
             <button id="stay" class="button">Stay</button>
         </div>
@@ -49,7 +48,7 @@
         <div id="valueP" class="value">
         </div>
 
-   
+
 
     </div>
 

@@ -182,16 +182,24 @@ input[type="range"]:active {
 }
 
 .win-banner {
+    display: none;
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 100%;
+
+    
+    
     background-color: black;
     color: white;
     text-align: center;
-    vertical-align: middle;
     font-size: 24px;
     font-weight: bold;
+    z-index: 1000; /* Set a high z-index to make the win banner appear above other elements */
+    display: flex;
+    align-items: center; /* Vertically center content */
+    justify-content: center; /* Horizontally center content */
 }
+
 

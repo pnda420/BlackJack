@@ -19,7 +19,6 @@ const GameOutcome = {
     DRAW: "draw"
 };
 
-
 const clickSound = document.getElementById("clickSound");
 const foldSound = document.getElementById("foldSound");
 const winSound = document.getElementById("winSound");
@@ -28,14 +27,14 @@ const coinSound = document.getElementById("coinSound")
 const volumeSlider = document.getElementById("volumeSlider");
 
 document.addEventListener("DOMContentLoaded", function () {
-    const startButton = document.getElementById("bet");
-    startButton.addEventListener("click", function () {
-        if (canPlay == false) {
+    const betButton = document.getElementById("betButton");
+    betButton.addEventListener("click", function () {
+        if (canPlay == false && IntBetMoney > 0) {
             coinSound.volume = volumeSlider.value;
             coinSound.play();
 
-            if (InttotalMoney >= IntBetMoney) {
-                InttotalMoney-=IntBetMoney;
+            if (InttotalMoney >= IntBetMoney && IntBetMoney > 0) {
+                InttotalMoney -= IntBetMoney;
                 totalMoney.textContent = `${InttotalMoney}`;
                 startGame();
                 canPlay = true;
@@ -65,17 +64,21 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     const decreaseMoney = document.getElementById("decreaseMoney");
     decreaseMoney.addEventListener("click", function () {
+        if(IntBetMoney > 0){
         clickSound.volume = volumeSlider.value;
         clickSound.play();
         IntBetMoney -= 10;
-        betMoney.textContent = `Bet ${IntBetMoney}€`;
+        betMoney.textContent = `${IntBetMoney}`;
+    }
     });
     const addMoney = document.getElementById("addMoney");
     addMoney.addEventListener("click", function () {
+        if(IntBetMoney < InttotalMoney){
         clickSound.volume = volumeSlider.value;
         clickSound.play();
         IntBetMoney += 10;
-        betMoney.textContent = `Bet ${IntBetMoney}€`;
+        betMoney.textContent = `${IntBetMoney}`;
+    }
     });
 });
 
@@ -137,6 +140,9 @@ const delay = (delayInms) => {
 function winCheck(outcome) {
     canPlay = false;
 
+    //const winBanner = document.getElementById("winBanner");
+    //const winText = document.getElementById("winText");
+
     switch (outcome) {
         case GameOutcome.DRAW:
             InttotalMoney += IntBetMoney;
@@ -148,12 +154,12 @@ function winCheck(outcome) {
         case GameOutcome.PLAYER_WIN:
             winSound.volume = volumeSlider.value;
             winSound.play();
-            if(playerHasBJ){
+            if (playerHasBJ) {
                 InttotalMoney += IntBetMoney * 2.5;
-            }else{
+            } else {
                 InttotalMoney += IntBetMoney * 2;
             }
-            
+
             totalMoney.textContent = `${InttotalMoney}`;
             console.log("WIN");
             break;
@@ -177,12 +183,12 @@ function startGame() {
         const cardBorderCom = document.getElementById("card-borderCom");
         if (cardBorderCom) { removeChildNodes(cardBorderCom); }
         reloadComCards();
-        
+
         let outcome = GameOutcome.DEALER_WIN;
-        
+
         winCheck(outcome);
     }
-    if(IntvalueP == 21){
+    if (IntvalueP == 21) {
         valueP.textContent = "BlackJack!";
         playerHasBJ = true;
         console.log("PlayerHasBJ");
@@ -195,7 +201,7 @@ function getCard() {
 
     if (IntvalueP > 21) {
         let outcome = GameOutcome.DEALER_WIN;
-        
+
         winCheck(outcome);
     }
 }
